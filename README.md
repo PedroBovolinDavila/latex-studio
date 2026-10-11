@@ -1,5 +1,7 @@
 # LaTeX Studio
 
+https://pedrobovolindavila.github.io/latex-studio/latex-studio-standalone.html
+
 A lightweight, browser-based LaTeX editor designed to make technical writing easier for engineering students. LaTeX Studio combines a code editor and live preview with visual tools for mathematical notation, tables, matrices, electrical circuits, and block diagrams. It also includes keyboard shortcuts, technical-writing suggestions, and `.tex` export.
 
 > **Interface language:** Portuguese (Brazilian Portuguese). This README is written in English for the project repository.
