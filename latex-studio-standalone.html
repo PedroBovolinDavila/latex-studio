@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>LaTeX Studio | Editor para engenharia elétrica</title><meta name="description" content="Editor LaTeX com circuitos, tabelas, matrizes e dicas de escrita.">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Newsreader:wght@400;600&display=swap" rel="stylesheet">
+<script>window.MathJax={tex:{inlineMath:[['$','$']],displayMath:[['$$','$$'],['\\[','\\]']]},svg:{fontCache:'global'},options:{enableMenu:false},startup:{typeset:false}};</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js" onload="window._mj=1;window.mjReady&&mjReady()"></script>
+<style>
+:root{--bg:#F6F7F9;--ink:#101828;--mute:#5B6676;--line:#D3D9E1;--acc:#17306F;--pn:#EBEEF3;--wire:#17306F;
+--sans:"IBM Plex Sans",system-ui,-apple-system,sans-serif;--serif:"Newsreader",Georgia,serif;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0E141C;--ink:#E6EBF1;--mute:#93A0AE;--line:#27323E;--acc:#8EA6F2;--pn:#161F2A;--wire:#8EA6F2}}
+:root[data-theme="dark"]{--bg:#0E141C;--ink:#E6EBF1;--mute:#93A0AE;--line:#27323E;--acc:#8EA6F2;--pn:#161F2A;--wire:#8EA6F2}
+html,body{margin:0}*,*::before,*::after{box-sizing:inherit}
+body{background:var(--bg);color:var(--ink);font:15px/1.5 var(--sans)}
+:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.hide{display:none!important}
+header{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:14px 20px;border-bottom:1px solid var(--line)}
+header h1{font:600 17px var(--sans);margin:0}
+header .meta{display:flex;gap:8px;flex-wrap:wrap}
+input[type=text],input[type=number],select,textarea{font:14px var(--sans);color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:3px;padding:6px 8px}
+input[type=number]{width:64px}
+.btn{font:500 13.5px var(--sans);background:var(--acc);color:var(--bg);border:1px solid var(--acc);padding:7px 14px;border-radius:3px;cursor:pointer}
+.btn.g{background:none;color:var(--acc)}
+main{display:grid;grid-template-columns:1fr;gap:0}
+@media(min-width:960px){main{grid-template-columns:minmax(360px,430px) 1fr;height:calc(100vh - 62px)}main>*{overflow:auto}}
+#tools{border-right:1px solid var(--line);padding:14px 16px;background:var(--pn)}
+.tabs{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:12px}
+.tabs button{font:500 13px var(--sans);background:none;border:1px solid var(--line);color:var(--mute);padding:5px 10px;cursor:pointer;border-radius:3px}
+.tabs button[aria-pressed=true]{color:var(--bg);background:var(--acc);border-color:var(--acc)}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:8px 0}
+.row label{font-size:13px;color:var(--mute)}
+.keys{display:flex;flex-wrap:wrap;gap:4px;max-height:300px;overflow:auto;margin-top:8px}
+.keys button,.sn button{min-width:38px;height:34px;padding:0 8px;font:16px var(--serif);background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:3px;cursor:pointer}
+.sn button{font:13px var(--sans);height:auto;min-height:32px;padding:5px 9px}
+.keys button:hover,.sn button:hover{border-color:var(--acc);color:var(--acc)}
+.sn{display:flex;flex-wrap:wrap;gap:5px}
+.gr{display:grid;gap:3px;margin:8px 0;overflow-x:auto}
+.gr input{width:100%;min-width:52px;padding:5px;text-align:center}
+#cv{width:100%;height:auto;background:var(--bg);border:1px solid var(--line);touch-action:none;cursor:crosshair;color:var(--wire)}
+.cv{max-width:100%;height:auto;color:var(--wire)}
+#ed{display:flex;flex-direction:column;min-width:0}
+#src{width:100%;min-height:300px;flex:1;font:14px/1.55 ui-monospace,Menlo,Consolas,monospace;border:0;border-bottom:1px solid var(--line);border-radius:0;padding:14px 18px;resize:vertical}
+#pv{padding:18px 22px;font:17px/1.6 var(--serif);min-height:200px}
+#pv h2{font:600 24px var(--serif);margin:.8em 0 .4em}#pv h3{font:600 19px var(--serif);margin:.8em 0 .3em}
+#pv .mm{overflow-x:auto;margin:.6em 0}
+.tb{border-collapse:collapse;margin:.8em auto;font-size:16px}.tb td{padding:4px 12px;text-align:center}.tb.bd td{border:1px solid var(--ink)}
+.cap{text-align:center;font-size:15px;color:var(--mute)}.img{border:1px dashed var(--line);padding:24px;text-align:center;color:var(--mute);font:14px var(--sans)}
+.lbl{font:600 12.5px var(--sans);color:var(--mute);padding:8px 22px 0}
+#exp,#ks{position:fixed;inset:0;background:rgba(10,15,25,.6);display:flex;align-items:center;justify-content:center;padding:20px;z-index:9}
+#exp>div,#ks>div{background:var(--bg);border:1px solid var(--line);padding:18px;width:min(820px,100%);max-height:90vh;display:flex;flex-direction:column;gap:10px}
+#exp textarea{flex:1;min-height:320px;font:13px/1.5 ui-monospace,Menlo,monospace}
+.hint{font-size:12.5px;color:var(--mute);margin:6px 0}
+.rb{display:flex;flex-wrap:wrap;gap:4px;align-items:center;padding:8px 14px;border-bottom:1px solid var(--line);background:var(--pn);position:sticky;top:0;z-index:2}
+.rb button{min-width:32px;height:30px;padding:0 8px;font:14px var(--serif);background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:3px;cursor:pointer}
+.rb button:hover{border-color:var(--acc);color:var(--acc)}.rb select{height:30px;padding:0 6px;font-size:13px}.rb .sp{width:1px;height:20px;background:var(--line);margin:0 4px}
+.cw{overflow:auto;max-height:58vh;border:1px solid var(--line)}.cw #cv{border:0;display:block}
+#p-Circuito.full{position:fixed;inset:0;z-index:8;background:var(--pn);overflow:auto;padding:14px 18px}
+#p-Circuito.full .cw{max-height:none;overflow:visible}
+#p-Circuito.full #cctl{position:sticky;top:-14px;background:var(--pn);z-index:3;padding:6px 0 10px;border-bottom:1px solid var(--line);margin-bottom:10px}
+.tip{border-left:3px solid var(--acc);padding:6px 10px;margin:6px 0;background:var(--bg);font-size:13.5px}.tip.w{border-color:#B7791F}
+.ai{white-space:pre-wrap;font-size:14px;background:var(--bg);border:1px solid var(--line);padding:10px;margin-top:8px;max-height:360px;overflow:auto}
+#pv h1{font:600 30px var(--serif);margin:.8em 0 .4em}#pv h4{font:600 16px var(--serif);margin:.8em 0 .3em}#pv mark{background:#FFE58A;color:#222}#pv blockquote{margin:.8em 2em;color:var(--mute);font-style:italic}
+details{margin-top:10px;font-size:13.5px}details li{margin:4px 0}hr.s{border:0;border-top:1px solid var(--line);margin:16px 0}
+#ts{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:8px 14px;border-radius:4px;font:13.5px var(--sans);z-index:12;max-width:92vw}
+.kt{border-collapse:collapse;font-size:13.5px}.kt td{padding:6px 10px;border-bottom:1px solid var(--line);vertical-align:top}.kt td:first-child{white-space:nowrap}
+</style></head><body>
+<header><h1>LaTeX Studio</h1>
+<div class="meta"><input type="text" id="dt" placeholder="Título do documento" aria-label="Título"><input type="text" id="da" placeholder="Autor" value="Pedro Bovolin D'Avila" aria-label="Autor"><select id="dk" aria-label="Tipo de documento"><option value="article">Artigo</option><option value="report">Apostila</option></select><label style="font-size:13px;color:var(--mute)"><input type="checkbox" id="sk" checked> Atalhos de símbolos</label><button class="btn g" id="kb" type="button">Atalhos</button><button class="btn" id="bx" type="button">Exportar .tex</button></div></header>
+<main>
+<aside id="tools"><div class="tabs" id="tt"></div>
+
+<div class="pn" id="p-Símbolos"><input type="text" id="q" placeholder="Buscar símbolo (ex.: alpha, seta, integral)" style="width:100%"><div class="tabs" id="cats" style="margin-top:8px"></div><div class="keys" id="keys"></div></div>
+
+<div class="pn hide" id="p-Tabela"><div class="row"><label>Linhas <input type="number" id="tr" min="1" max="20" value="3"></label><label>Colunas <input type="number" id="tc" min="1" max="10" value="3"></label></div>
+<div class="row"><select id="tb" aria-label="Bordas"><option value="all">Todas as bordas</option><option value="boo">Linhas horizontais (booktabs)</option><option value="no">Sem bordas</option></select><select id="ta" aria-label="Alinhamento"><option value="c">Centralizado</option><option value="l">Esquerda</option><option value="r">Direita</option></select></div>
+<div class="row"><label><input type="checkbox" id="th" checked> 1ª linha em negrito</label></div><input type="text" id="tcap" placeholder="Legenda (opcional)" style="width:100%"><div class="gr" id="tg"></div><p class="hint">Células aceitam LaTeX, como $R_1$.</p><button class="btn" id="tins" type="button">Inserir tabela</button></div>
+
+<div class="pn hide" id="p-Matriz"><div class="row"><label>Linhas <input type="number" id="mr" min="1" max="8" value="2"></label><label>Colunas <input type="number" id="mc" min="1" max="8" value="2"></label><select id="mt" aria-label="Tipo"><option value="bmatrix">[ ]</option><option value="pmatrix">( )</option><option value="vmatrix">| | (det)</option><option value="Bmatrix">{ }</option></select></div><div class="gr" id="mg"></div><button class="btn" id="mins" type="button">Inserir matriz</button>
+<hr style="border:0;border-top:1px solid var(--line);margin:16px 0"><b>Sistema de equações</b><textarea id="eq" rows="4" style="width:100%;margin-top:6px" placeholder="Uma equação por linha:&#10;2x + y = 5&#10;x - y = 1"></textarea><div class="row"><select id="es" aria-label="Estilo"><option value="cases">Chave (cases)</option><option value="align">Alinhado (align*)</option></select><button class="btn" id="eins" type="button">Inserir sistema</button></div></div>
+
+<div class="pn hide" id="p-Circuito"><div id="cctl"><div class="sn" id="ct"></div><div class="row"><input type="text" id="lab" placeholder="Rótulo (ex.: R_1)" style="width:130px"><button class="btn g" id="cu" type="button">Desfazer</button><button class="btn g" id="cc" type="button">Limpar</button></div>
+<div class="row"><select id="gs" aria-label="Tamanho da área"><option value="20x14">Pequena 20×14</option><option value="32x20" selected>Média 32×20</option><option value="48x30">Grande 48×30</option><option value="80x50">Enorme 80×50</option></select><select id="zm" aria-label="Zoom"><option value="fit">Ajustar</option><option value="1">100%</option><option value="1.5">150%</option><option value="2">200%</option></select><button class="btn g" id="cf" type="button">Tela cheia</button><button class="btn" id="cins" type="button">Inserir circuito</button></div></div>
+<div class="cw"><svg id="cv" viewBox="0 0 768 480" role="img" aria-label="Área do circuito"></svg></div><p class="hint">Escolha o componente e arraste de um ponto a outro da grade (linhas só na horizontal ou vertical). Para circuitos grandes, aumente a área e use a tela cheia. "Apagar" remove o elemento clicado. Esc sai da tela cheia.</p></div>
+
+<div class="pn hide" id="p-Diagrama"><input type="text" id="bl" value="Referência, Controlador, Planta, Saída" style="width:100%" aria-label="Blocos"><div class="row"><label><input type="checkbox" id="bf" checked> Realimentação</label></div><div id="bp"></div><p class="hint">Blocos em série, separados por vírgula.</p><button class="btn" id="bins" type="button">Inserir diagrama de blocos</button></div>
+
+<div class="pn hide" id="p-Formatar"><div class="sn" id="fm"></div><hr style="border:0;border-top:1px solid var(--line);margin:16px 0"><b>Figura</b><div class="row"><input type="text" id="fa" placeholder="arquivo.png"><input type="text" id="fl" placeholder="Legenda"></div><button class="btn" id="fins" type="button">Inserir figura</button></div>
+<div class="pn hide" id="p-Escrita"><div id="stt" class="hint"></div><b>Dicas automáticas</b><div id="tips"></div>
+<hr class="s"><b>Vocabulário acadêmico</b><div id="vc"></div>
+<details><summary>Guia rápido de escrita técnica</summary><ul><li><b>Um parágrafo, uma ideia.</b> Abra com a frase principal e use as seguintes para sustentá-la.</li><li><b>Defina antes de usar.</b> Explique cada símbolo e sigla na primeira aparição.</li><li><b>A equação faz parte da frase.</b> Pontue-a e escreva "onde" para listar as variáveis.</li><li><b>Voz impessoal, verbos precisos.</b> "Observa-se que…" no lugar de "a gente viu que…".</li><li><b>Frases de até ~25 palavras.</b> Se há muitos "que" seguidos, divida.</li><li><b>Conecte as ideias</b> com conectivos (veja o vocabulário acima) para o leitor não se perder.</li><li><b>Figuras e tabelas</b> levam legenda clara e são citadas no texto (\ref).</li><li><b>Apostila:</b> objetivo, teoria, exemplo resolvido, exercícios. <b>Artigo:</b> introdução, método, resultados, conclusão.</li><li><b>Revise</b> lendo em voz alta e cortando cerca de 10% do texto.</li></ul></details></div>
+</aside>
+
+<section id="ed"><div class="rb" id="rb"></div><textarea id="src" spellcheck="false" aria-label="Código LaTeX"></textarea><div class="lbl">Pré-visualização</div><div id="pv"></div></section>
+</main>
+
+<div id="ts" class="hide" role="status"></div><div id="ks" class="hide"><div style="overflow:auto"><b>Atalhos de teclado</b><span class="hint">No Mac, use Cmd no lugar de Ctrl. Para desligar os atalhos de símbolos, desmarque a caixa no topo.</span><table class="kt" id="ksb"></table><div class="row"><button class="btn g" id="ksx" type="button">Fechar</button></div></div></div><div id="exp" class="hide"><div><b>Documento completo (.tex)</b><textarea id="xt" readonly></textarea><div class="row"><button class="btn" id="xc" type="button">Copiar</button><button class="btn g" id="xd" type="button">Baixar</button><button class="btn g" id="xx" type="button">Fechar</button><span id="xs" class="hint"></span></div><p class="hint">Baixe o .tex ou cole o código no Overleaf.</p></div></div>
+
+<script>
+var $=function(i){return document.getElementById(i)},ta=$('src'),tmr,curEl,U=24;
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+function tex(el){curEl=el;if(window._mj&&MathJax.typesetPromise)MathJax.typesetPromise([el]).catch(function(){})}
+window.mjReady=function(){if(curEl)tex(curEl)};
+function ins(sn){ta.focus();var s=ta.selectionStart,e=ta.selectionEnd,sel=ta.value.slice(s,e),at=sn.indexOf('§'),o=at<0?sn:sn.replace('§',sel),p=at<0?s+o.length:s+at+sel.length,ok=false;
+ try{ok=document.execCommand('insertText',false,o)}catch(x){}
+ if(!ok)ta.value=ta.value.slice(0,s)+o+ta.value.slice(e);ta.setSelectionRange(p,p);prev()}
+function P(s){return s.split(',').map(function(x){var a=x.split(' ');return [a[0],/^[a-zA-Z]/.test(a[1])?'\\'+a[1]:a[1],a[1]]})}
+
+/* ---- símbolos ---- */
+var S={'Estruturas':[['a/b','\\frac{§}{}'],['√','\\sqrt{§}'],['xⁿ','^{§}'],['xₙ','_{§}'],['∑','\\sum_{§}^{}'],['∫','\\int_{§}^{}'],['∬','\\iint'],['∮','\\oint'],['∏','\\prod_{§}^{}'],['lim','\\lim_{§\\to }'],['d/dt','\\frac{d}{dt}'],['∂/∂x','\\frac{\\partial §}{\\partial }'],['( )','\\left(§\\right)'],['[ ]','\\left[§\\right]'],['{ }','\\left\\{§\\right\\}'],['| |','\\left|§\\right|'],['v⃗','\\vec{§}'],['x̂','\\hat{§}'],['x̄','\\bar{§}'],['ẋ','\\dot{§}'],['ẍ','\\ddot{§}'],['x̃','\\tilde{§}'],['sobre','\\overline{§}'],['chave','\\underbrace{§}_{}'],['texto','\\text{§}'],['unid.','\\mathrm{§}'],['binom','\\binom{§}{}']],
+'Grego':P('α alpha,β beta,γ gamma,δ delta,ε epsilon,ϵ varepsilon,ζ zeta,η eta,θ theta,ϑ vartheta,ι iota,κ kappa,λ lambda,μ mu,ν nu,ξ xi,π pi,ρ rho,σ sigma,τ tau,υ upsilon,φ phi,ϕ varphi,χ chi,ψ psi,ω omega,Γ Gamma,Δ Delta,Θ Theta,Λ Lambda,Ξ Xi,Π Pi,Σ Sigma,Φ Phi,Ψ Psi,Ω Omega'),
+'Operadores':P('± pm,∓ mp,× times,· cdot,÷ div,∗ ast,∘ circ,⊕ oplus,⊗ otimes,∇ nabla,∂ partial,∞ infty,∅ emptyset,∈ in,∉ notin,⊂ subset,⊆ subseteq,⊃ supset,∪ cup,∩ cap,∀ forall,∃ exists,¬ neg,∧ land,∨ lor,… ldots,⋯ cdots,⋮ vdots,⋱ ddots,′ prime,ℏ hbar,ℓ ell,ℜ Re,ℑ Im,★ star,† dagger'),
+'Relações':P('= =,≠ neq,≈ approx,≡ equiv,∝ propto,< <,> >,≤ leq,≥ geq,≪ ll,≫ gg,∼ sim,≅ cong,∥ parallel,⊥ perp,∠ angle,∣ mid,≺ prec,≻ succ'),
+'Setas':P('→ to,← leftarrow,↔ leftrightarrow,⇒ Rightarrow,⇐ Leftarrow,⇔ Leftrightarrow,↦ mapsto,↑ uparrow,↓ downarrow,⟶ longrightarrow,⟹ implies,⟺ iff,↗ nearrow,↘ searrow,⇌ rightleftharpoons'),
+'Funções':P('sen sin,cos cos,tan tan,cot cot,sec sec,arcsen arcsin,arccos arccos,arctan arctan,senh sinh,cosh cosh,tanh tanh,ln ln,log log,exp exp,máx max,mín min,sup sup,inf inf,lim lim,det det,dim dim,ker ker,mod bmod'),
+'Fontes':[['ℝ','\\mathbb{R}'],['ℂ','\\mathbb{C}'],['ℕ','\\mathbb{N}'],['ℤ','\\mathbb{Z}'],['ℚ','\\mathbb{Q}'],['𝒜','\\mathcal{§}'],['𝐱','\\mathbf{§}'],['rm','\\mathrm{§}'],['sf','\\mathsf{§}'],['bf','\\textbf{§}'],['it','\\textit{§}'],['tt','\\texttt{§}']],
+'Eng. elétrica':[['Ω','\\,\\Omega'],['V','\\,\\mathrm{V}'],['A','\\,\\mathrm{A}'],['W','\\,\\mathrm{W}'],['Hz','\\,\\mathrm{Hz}'],['F','\\,\\mathrm{F}'],['H','\\,\\mathrm{H}'],['dB','\\,\\mathrm{dB}'],['kΩ','\\,\\mathrm{k}\\Omega'],['µF','\\,\\mu\\mathrm{F}'],['j','j'],['e^{jωt}','e^{j\\omega t}'],['∠θ','\\angle §^\\circ'],['ℒ{ }','\\mathcal{L}\\{§\\}'],['ℱ{ }','\\mathcal{F}\\{§\\}'],['H(s)','H(s)=\\frac{§}{}'],['H(jω)','H(j\\omega)'],['δ(t)','\\delta(t)'],['u(t)','u(t)'],['R∥R','R_1\\parallel R_2'],['Z','Z='],['Re{ }','\\mathrm{Re}\\{§\\}'],['Im{ }','\\mathrm{Im}\\{§\\}'],['∇×','\\nabla\\times\\vec{§}'],['∇·','\\nabla\\cdot\\vec{§}'],['∮E·dl','\\oint \\vec{E}\\cdot d\\vec{l}'],['cos φ','\\cos\\varphi'],['V_rms','V_{\\mathrm{rms}}'],['P=VI','P=V\\,I']]};
+var cat='Estruturas';
+function keys(){var q=$('q').value.trim().toLowerCase(),l=[];
+ Object.keys(S).forEach(function(k){if(!q&&k!==cat)return;S[k].forEach(function(x){if(!q||(x[0]+' '+x[1]).toLowerCase().indexOf(q)>=0)l.push(x)})});
+ $('keys').innerHTML=l.map(function(x,i){return '<button type="button" data-k="'+i+'" title="'+esc(x[1].trim())+'">'+esc(x[0])+'</button>'}).join('')||'<span class="hint">Nada encontrado.</span>';$('keys')._l=l}
+function cats(){$('cats').innerHTML=Object.keys(S).map(function(k){return '<button type="button" aria-pressed="'+(k===cat)+'" data-c="'+k+'">'+k+'</button>'}).join('')}
+$('cats').onclick=function(e){var c=e.target.getAttribute('data-c');if(c){cat=c;$('q').value='';cats();keys()}};
+$('q').oninput=keys;$('keys').onmousedown=function(e){e.preventDefault()};
+$('keys').onclick=function(e){var i=e.target.getAttribute('data-k');if(i!==null)ins($('keys')._l[i][1])};
+
+/* ---- abas ---- */
+var TABS=['Símbolos','Tabela','Matriz','Circuito','Diagrama','Formatar','Escrita'],tab='Símbolos';
+function tabs(){$('tt').innerHTML=TABS.map(function(t){return '<button type="button" data-t="'+t+'" aria-pressed="'+(t===tab)+'">'+t+'</button>'}).join('');TABS.forEach(function(t){$('p-'+t).classList.toggle('hide',t!==tab)})}
+$('tt').onclick=function(e){var t=e.target.getAttribute('data-t');if(t){tab=t;tabs();analyze()}};
+
+/* ---- grades (tabela e matriz) ---- */
+function grid(el,st,r,c){while(st.length<r)st.push([]);el.style.gridTemplateColumns='repeat('+c+',1fr)';var h='';
+ for(var i=0;i<r;i++)for(var j=0;j<c;j++)h+='<input type="text" data-r="'+i+'" data-c="'+j+'" value="'+esc(st[i][j]||'').replace(/"/g,'&quot;')+'" aria-label="Linha '+(i+1)+', coluna '+(j+1)+'">';
+ el.innerHTML=h;el.oninput=function(e){var a=e.target;st[a.dataset.r][+a.dataset.c]=a.value}}
+var TD=[['Grandeza','Símbolo','Unidade'],['Tensão','$V$','V'],['Corrente','$I$','A']],MD=[['1','0'],['0','1']];
+function tg(){grid($('tg'),TD,+$('tr').value||1,+$('tc').value||1)}function mg(){grid($('mg'),MD,+$('mr').value||1,+$('mc').value||1)}
+['tr','tc'].forEach(function(i){$(i).onchange=tg});['mr','mc'].forEach(function(i){$(i).onchange=mg});
+$('tins').onclick=function(){var r=+$('tr').value,c=+$('tc').value,b=$('tb').value,a=$('ta').value,sp=b==='all'?'|'+Array(c+1).join(a+'|'):Array(c+1).join(a),o='\\begin{table}[H]\n\\centering\n',cap=$('tcap').value.trim();
+ if(cap)o+='\\caption{'+cap+'}\n';o+='\\begin{tabular}{'+sp+'}\n'+(b==='all'?'\\hline\n':b==='boo'?'\\toprule\n':'');
+ for(var i=0;i<r;i++){var row=[];for(var j=0;j<c;j++){var v=(TD[i]&&TD[i][j])||'';row.push(i===0&&$('th').checked&&v?'\\textbf{'+v+'}':v)}
+  o+=row.join(' & ')+' \\\\\n'+(b==='all'?'\\hline\n':b==='boo'&&i===0&&r>1?'\\midrule\n':'')}
+ o+=(b==='boo'?'\\bottomrule\n':'')+'\\end{tabular}\n\\end{table}\n';ins('\n'+o+'\n')};
+$('mins').onclick=function(){var r=+$('mr').value,c=+$('mc').value,t=$('mt').value,rows=[];
+ for(var i=0;i<r;i++){var x=[];for(var j=0;j<c;j++)x.push((MD[i]&&MD[i][j])||'0');rows.push('  '+x.join(' & '))}
+ ins('\n\\[\n\\begin{'+t+'}\n'+rows.join(' \\\\\n')+'\n\\end{'+t+'}\n\\]\n')};
+$('eins').onclick=function(){var l=$('eq').value.split('\n').map(function(x){return x.trim()}).filter(Boolean);if(!l.length)return;
+ ins($('es').value==='cases'?'\n\\[\n\\begin{cases}\n  '+l.join(' \\\\\n  ')+'\n\\end{cases}\n\\]\n':'\n\\begin{align*}\n  '+l.map(function(x){return x.replace('=','&=')}).join(' \\\\\n  ')+'\n\\end{align*}\n')};
+
+/* ---- circuitos ---- */
+var CT=[['R','Resistor'],['C','Capacitor'],['L','Indutor'],['V','Fonte V'],['I','Fonte I'],['D','Diodo'],['spst','Chave'],['lamp','Lâmpada'],['short','Fio'],['gnd','Terra'],['del','Apagar']],
+ PRE={R:'R',C:'C',L:'L',V:'V',I:'I',D:'D',spst:'S',lamp:'E'},els=[],cnt={},tool='R',drag=null,cvs=$('cv');
+$('ct').innerHTML=CT.map(function(c){return '<button type="button" data-o="'+c[0]+'" aria-pressed="'+(c[0]==='R')+'">'+c[1]+'</button>'}).join('');
+$('ct').onclick=function(e){var o=e.target.getAttribute('data-o');if(!o)return;tool=o;[].forEach.call($('ct').children,function(b){b.setAttribute('aria-pressed',b.dataset.o===o);b.style.background=b.dataset.o===o?'var(--acc)':'';b.style.color=b.dataset.o===o?'var(--bg)':''})};
+$('ct').firstChild.click();
+function sym(e){var x1=e.x1*U,y1=e.y1*U,x2=e.x2*U,y2=e.y2*U;
+ if(e.t==='gnd')return '<path d="M'+x1+' '+y1+'v8m-9 0h18m-14 4h10m-6 4h2" fill="none"/>';
+ var dx=x2-x1,dy=y2-y1,len=Math.hypot(dx,dy),L=Math.min(len,48),h=L/2,mx=(x1+x2)/2,my=(y1+y2)/2,a=Math.atan2(dy,dx)*180/Math.PI,b='',vert=Math.abs(dy)>Math.abs(dx),s='<line x1="'+x1+'" y1="'+y1+'" x2="'+x2+'" y2="'+y2+'"/>';
+ if(e.t==='short')return s;
+ var ld=function(a1,a2){return '<path d="M'+-h+' 0H'+a1+'M'+a2+' 0H'+h+'" fill="none"/>'};
+ if(e.t==='R')b='<rect x="'+-h+'" y="-7" width="'+L+'" height="14" style="fill:var(--bg)"/>';
+ if(e.t==='C')b=ld(-3,3)+'<path d="M-3 -10v20M3 -10v20"/>';
+ if(e.t==='L'){var r=h/4;b='<path fill="none" d="M'+-h+' 0'+Array(5).join('a'+r+' '+r+' 0 0 1 '+2*r+' 0')+'"/>'}
+ if(e.t==='V')b=ld(-11,11)+'<circle r="11" style="fill:var(--bg)"/><path d="M-6 0h4M-4 -2v4M3 0h4" fill="none"/>';
+ if(e.t==='I')b=ld(-11,11)+'<circle r="11" style="fill:var(--bg)"/><path d="M-6 0H6m-3 -3l3 3-3 3" fill="none"/>';
+ if(e.t==='D')b=ld(-5,5)+'<path d="M-5 -7v14l10 -7z M5 -7v14" style="fill:var(--bg)"/>';
+ if(e.t==='spst')b=ld(-12,12)+'<path d="M-12 0L10 -10" fill="none"/>';
+ if(e.t==='lamp')b=ld(-10,10)+'<circle r="10" style="fill:var(--bg)"/><path d="M-7 -7L7 7M-7 7L7 -7" fill="none"/>';
+ var lb=e.l?'<text x="'+(mx+(vert?16:0))+'" y="'+(my+(vert?4:-14))+'" text-anchor="'+(vert?'start':'middle')+'" font-size="13" font-style="italic" fill="currentColor" stroke="none">'+esc(e.l).replace(/_\{?(\w+)\}?/,'<tspan baseline-shift="sub" font-size="9">$1</tspan>')+'</text>':'';
+ return s+'<g transform="translate('+mx+' '+my+') rotate('+a+')">'+b+'</g>'+lb}
+function layer(l){var n={},o='';l.forEach(function(e){o+=sym(e);if(e.t!=='gnd'&&e.t!=='short'||e.t==='short'){[[e.x1,e.y1],[e.x2,e.y2]].forEach(function(p){var k=p.join();n[k]=(n[k]||0)+1})}});
+ Object.keys(n).forEach(function(k){if(n[k]>=3){var p=k.split(',');o+='<circle cx="'+p[0]*U+'" cy="'+p[1]*U+'" r="3.5" fill="currentColor"/>'}});return o}
+var SA='fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"';
+var GW=32,GH=20;
+function cl(v,a,b){return Math.max(a,Math.min(b,v))}
+function draw(){var d=drag?sym({t:tool,x1:drag.a[0],y1:drag.a[1],x2:drag.b[0],y2:drag.b[1],l:''}):'';
+ cvs.innerHTML='<defs><pattern id="gp" x="-12" y="-12" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="12" cy="12" r="1.2" fill="var(--line)" stroke="none"/></pattern></defs><rect x="-12" y="-12" width="'+(GW*U+24)+'" height="'+(GH*U+24)+'" fill="url(#gp)" stroke="none"/><g '+SA+' style="stroke:var(--wire)">'+layer(els)+'<g opacity=".5">'+d+'</g></g>'}
+function pt(e){var r=cvs.getBoundingClientRect();return [cl(Math.round((e.clientX-r.left)/r.width*GW),0,GW),cl(Math.round((e.clientY-r.top)/r.height*GH),0,GH)]}
+function setG(){var v=$('gs').value.split('x');GW=+v[0];GH=+v[1];cvs.setAttribute('viewBox','0 0 '+GW*U+' '+GH*U);var z=$('zm').value;cvs.style.width=z==='fit'?'100%':GW*U*z+'px';draw()}
+$('gs').onchange=setG;$('zm').onchange=setG;
+$('cf').onclick=function(){var f=$('p-Circuito').classList.toggle('full');this.textContent=f?'Sair da tela cheia':'Tela cheia'};
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&$('p-Circuito').classList.contains('full'))$('cf').click()});
+function ds(p,e){var ax=e.x1,ay=e.y1,bx=e.x2,by=e.y2,dx=bx-ax,dy=by-ay,l=dx*dx+dy*dy,t=l?Math.max(0,Math.min(1,((p[0]-ax)*dx+(p[1]-ay)*dy)/l)):0;return Math.hypot(p[0]-ax-t*dx,p[1]-ay-t*dy)}
+cvs.onpointerdown=function(e){var p=pt(e);
+ if(tool==='del'){var bi=-1,bd=1;els.forEach(function(x,i){var d=ds(p,x);if(d<bd){bd=d;bi=i}});if(bi>=0){els.splice(bi,1);draw()}return}
+ if(tool==='gnd'){els.push({t:'gnd',x1:p[0],y1:p[1],x2:p[0],y2:p[1],l:''});draw();return}
+ drag={a:p,b:p};cvs.setPointerCapture(e.pointerId)};
+cvs.onpointermove=function(e){if(!drag)return;var p=pt(e);if(Math.abs(p[0]-drag.a[0])>=Math.abs(p[1]-drag.a[1]))p[1]=drag.a[1];else p[0]=drag.a[0];drag.b=p;draw()};
+cvs.onpointerup=function(){if(!drag)return;var d=drag;drag=null;
+ if(d.a[0]!==d.b[0]||d.a[1]!==d.b[1]){var l=$('lab').value.trim();$('lab').value='';
+  if(!l&&PRE[tool]){cnt[tool]=(cnt[tool]||0)+1;l=PRE[tool]+'_'+cnt[tool]}
+  els.push({t:tool,x1:d.a[0],y1:d.a[1],x2:d.b[0],y2:d.b[1],l:l})}draw()};
+$('cu').onclick=function(){els.pop();draw()};$('cc').onclick=function(){els=[];cnt={};draw()};
+$('cins').onclick=function(){if(!els.length)return;var xs=[];els.forEach(function(e){xs.push(e.x1,e.x2)});var w=Math.max.apply(0,xs)-Math.min.apply(0,xs),o='\\begin{circuitikz}'+(w>12?'[scale='+Math.round(1200/w)/100+',transform shape]':'')+'\n';
+ els.forEach(function(e){o+=e.t==='gnd'?'  \\draw ('+e.x1+','+-e.y1+') node[ground]{};\n':'  \\draw ('+e.x1+','+-e.y1+') to['+e.t+(e.l?', l=$'+e.l+'$':'')+'] ('+e.x2+','+-e.y2+');\n'});
+ ins('\n\\begin{figure}[H]\n\\centering\n'+o+'\\end{circuitikz}\n\\end{figure}\n\n')};
+function parseC(s){var l=[],m,re=/\\draw\s*\(([-\d.]+),([-\d.]+)\)\s*to\[([^,\]]+)(?:,\s*l=\$?([^$\]]*)\$?)?\]\s*\(([-\d.]+),([-\d.]+)\)/g,g=/\\draw\s*\(([-\d.]+),([-\d.]+)\)\s*node\[ground\]/g;
+ while(m=re.exec(s))l.push({t:m[3].trim(),x1:+m[1],y1:-m[2],x2:+m[5],y2:-m[6],l:m[4]||''});
+ while(m=g.exec(s))l.push({t:'gnd',x1:+m[1],y1:-m[2],x2:+m[1],y2:-m[2],l:''});return l}
+function circSVG(l){if(!l.length)return '<div class="img">circuito vazio</div>';var xs=[],ys=[];l.forEach(function(e){xs.push(e.x1,e.x2);ys.push(e.y1,e.y2)});
+ var a=Math.min.apply(0,xs)*U-30,b=Math.min.apply(0,ys)*U-34,w=(Math.max.apply(0,xs)-Math.min.apply(0,xs))*U+60,h=(Math.max.apply(0,ys)-Math.min.apply(0,ys))*U+80;
+ return '<svg class="cv" viewBox="'+a+' '+b+' '+w+' '+h+'" style="width:'+Math.min(w,560)+'px;display:block;margin:12px auto"><g '+SA+'>'+layer(l)+'</g></svg>'}
+
+/* ---- diagrama de blocos ---- */
+function names(){return $('bl').value.split(',').map(function(x){return x.trim()}).filter(Boolean)}
+function blkSVG(spec){var p=spec.split('|'),fb=p[p.length-1]==='fb=1',n=p.filter(function(x){return !/^fb=/.test(x)}),w=n.length*140+20,o='';
+ n.forEach(function(t,i){var x=14+i*140;o+='<rect x="'+x+'" y="14" width="104" height="42" style="fill:var(--bg)"/><text x="'+(x+52)+'" y="40" text-anchor="middle" font-size="13" fill="currentColor" stroke="none">'+esc(t)+'</text>';
+  if(i<n.length-1)o+='<path d="M'+(x+104)+' 35h36" marker-end="url(#ar)"/>'});
+ if(fb&&n.length>1)o+='<path d="M'+(14+(n.length-1)*140+52)+' 56v34H66V56" marker-end="url(#ar)"/>';
+ return '<svg class="cv" viewBox="0 0 '+w+' 100" style="width:'+Math.min(w,620)+'px;display:block;margin:12px auto"><defs><marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8z" fill="currentColor" stroke="none"/></marker></defs><g '+SA+'>'+o+'</g></svg>'}
+function spec(){return names().join('|')+($('bf').checked?'|fb=1':'')}
+function bp(){$('bp').innerHTML=blkSVG(spec())}$('bl').oninput=bp;$('bf').onchange=bp;
+$('bins').onclick=function(){var n=names();if(!n.length)return;var o='% blocos:'+spec()+'\n\\begin{tikzpicture}[block/.style={draw,rectangle,minimum width=2.4cm,minimum height=1cm},>=stealth]\n';
+ n.forEach(function(t,i){o+='  \\node[block] (b'+i+') at ('+i*3.6+',0) {'+t+'};\n'});for(var i=0;i<n.length-1;i++)o+='  \\draw[->] (b'+i+') -- (b'+(i+1)+');\n';
+ if($('bf').checked&&n.length>1)o+='  \\draw[->] (b'+(n.length-1)+'.south) -- ++(0,-1.2) -| (b0.south);\n';ins('\n'+o+'\\end{tikzpicture}\n\n')};
+
+/* ---- formatar ---- */
+var F=[['Seção','\n\\section{§}\n'],['Subseção','\n\\subsection{§}\n'],['Negrito','\\textbf{§}'],['Itálico','\\textit{§}'],['Sublinhado','\\underline{§}'],['Código','\\texttt{§}'],['Lista','\n\\begin{itemize}\n  \\item §\n  \\item \n\\end{itemize}\n'],['Lista numerada','\n\\begin{enumerate}\n  \\item §\n  \\item \n\\end{enumerate}\n'],['Equação numerada','\n\\begin{equation}\n  §\n\\end{equation}\n'],['Alinhar equações','\n\\begin{align}\n  § &= \\\\\n   &= \n\\end{align}\n'],['Fórmula destacada','\n\\[\n  §\n\\]\n'],['Fórmula na linha','$§$'],['Quebra de linha','\\\\\n'],['Nova página','\n\\newpage\n'],['Referência','\\ref{§}'],['Rótulo','\\label{§}'],['Nota de rodapé','\\footnote{§}'],['Comentário','% §']];
+$('fm').innerHTML=F.map(function(f,i){return '<button type="button" data-f="'+i+'">'+f[0]+'</button>'}).join('');
+$('fm').onmousedown=function(e){e.preventDefault()};$('fm').onclick=function(e){var i=e.target.getAttribute('data-f');if(i!==null)ins(F[i][1])};
+$('fins').onclick=function(){var f=$('fa').value.trim()||'figura.png',c=$('fl').value.trim();ins('\n\\begin{figure}[H]\n\\centering\n\\includegraphics[width=0.7\\textwidth]{'+f+'}\n'+(c?'\\caption{'+c+'}\n':'')+'\\end{figure}\n\n')};
+
+/* ---- pré-visualização ---- */
+var CM={ForestGreen:'#228B22',red:'#c0392b',blue:'#1d4ed8',Orange:'#d97706',Purple:'#7e22ce',gray:'#6b7280'},SZ={tiny:.6,scriptsize:.7,footnotesize:.8,small:.9,normalsize:1,large:1.2,Large:1.45,LARGE:1.7,huge:2,Huge:2.4};
+function fmt(s){return s.replace(/\\textbf\{([^{}]*)\}/g,'<b>$1</b>').replace(/\\(?:textit|emph)\{([^{}]*)\}/g,'<i>$1</i>').replace(/\\underline\{([^{}]*)\}/g,'<u>$1</u>').replace(/\\texttt\{([^{}]*)\}/g,'<code>$1</code>').replace(/\\hl\{([^{}]*)\}/g,'<mark>$1</mark>').replace(/\\textsuperscript\{([^{}]*)\}/g,'<sup>$1</sup>').replace(/\\textsubscript\{([^{}]*)\}/g,'<sub>$1</sub>').replace(/\\textcolor\{(\w+)\}\{([^{}]*)\}/g,function(m,c,t){return '<span style="color:'+(CM[c]||c)+'">'+t+'</span>'}).replace(/\{\\(tiny|scriptsize|footnotesize|small|normalsize|large|Large|LARGE|huge|Huge)\s+([^{}]*)\}/g,function(m,z,t){return '<span style="font-size:'+SZ[z]+'em">'+t+'</span>'}).replace(/\\footnote\{([^{}]*)\}/g,'<sup title="$1">[nota]</sup>')}
+function tabH(sp,b){var bd=/\||\\hline|\\toprule/.test(sp+b),r=b.replace(/\\(hline|toprule|midrule|bottomrule)/g,'').split('\\\\').map(function(x){return x.trim()}).filter(Boolean);
+ return '<table class="tb'+(bd?' bd':'')+'">'+r.map(function(x){return '<tr>'+x.split('&').map(function(c){return '<td>'+fmt(esc(c.trim()))+'</td>'}).join('')+'</tr>'}).join('')+'</table>'}
+function toHTML(s){var st=[];function H(h){st.push(h);return '\u0000'+(st.length-1)+'\u0000'}
+ s=s.replace(/% blocos:(.*)\n\\begin\{tikzpicture\}[\s\S]*?\\end\{tikzpicture\}/g,function(m,a){return H(blkSVG(a))})
+  .replace(/\\begin\{circuitikz\}[\s\S]*?\\end\{circuitikz\}/g,function(m){return H(circSVG(parseC(m)))})
+  .replace(/\\begin\{tabular\}\{([^}]*)\}([\s\S]*?)\\end\{tabular\}/g,function(m,a,b){return H(tabH(a,b))})
+  .replace(/\\begin\{(equation\*?|align\*?|gather\*?)\}[\s\S]*?\\end\{\1\}/g,function(m){return H('<div class="mm">'+esc(m)+'</div>')})
+  .replace(/\$\$[\s\S]*?\$\$|\\\[[\s\S]*?\\\]/g,function(m){return H('<div class="mm">'+esc(m)+'</div>')})
+  .replace(/\$[^$\n]+\$/g,function(m){return H(esc(m))}).replace(/^\s*%.*$/gm,'');
+ s=esc(s).replace(/\\chapter\*?\{([^}]*)\}/g,'\n\n<h1>$1</h1>\n\n').replace(/\\subsubsection\*?\{([^}]*)\}/g,'\n\n<h4>$1</h4>\n\n').replace(/\\begin\{(center|flushright|flushleft)\}/g,function(m,a){return '\n\n<div style="text-align:'+(a==='center'?'center':a==='flushright'?'right':'left')+'">'}).replace(/\\end\{(center|flushright|flushleft)\}/g,'</div>\n\n').replace(/\\begin\{quote\}/g,'\n\n<blockquote>').replace(/\\end\{quote\}/g,'</blockquote>\n\n').replace(/\\tableofcontents/g,'\n\n<div class="cap">[Sumário gerado na compilação]</div>\n\n').replace(/\\section\*?\{([^}]*)\}/g,'\n\n<h2>$1</h2>\n\n').replace(/\\subsection\*?\{([^}]*)\}/g,'\n\n<h3>$1</h3>\n\n')
+  .replace(/\\begin\{itemize\}/g,'\n\n<ul>').replace(/\\begin\{enumerate\}/g,'\n\n<ol>').replace(/\\end\{itemize\}/g,'</ul>\n\n').replace(/\\end\{enumerate\}/g,'</ol>\n\n').replace(/\\item\s*/g,'<li>')
+  .replace(/\\includegraphics(\[[^\]]*\])?\{([^}]*)\}/g,'\n\n<div class="img">[imagem: $2]</div>\n\n')
+  .replace(/\\caption\{([^}]*)\}/g,'\n\n<div class="cap">$1</div>\n\n').replace(/\\(begin|end)\{(table|figure)\}(\[[^\]]*\])?|\\centering|\\label\{[^}]*\}|\\newpage|\\maketitle/g,'').replace(/\\\\/g,'<br>');
+ s=fmt(s).split(/\n{2,}/).map(function(c){c=c.trim();return !c||/^<(h\d|ul|ol|div|blockquote)/.test(c)||/^\u0000\d+\u0000$/.test(c)?c:'<p>'+c+'</p>'}).join('\n');
+ for(var i=0;i<3;i++)s=s.replace(/\u0000(\d+)\u0000/g,function(m,k){return st[k]});return s}
+function prev(){clearTimeout(tmr);tmr=setTimeout(function(){$('pv').innerHTML=toHTML(ta.value)||'<span class="hint">A pré-visualização aparece aqui.</span>';tex($('pv'));analyze();try{localStorage.setItem('ls',JSON.stringify({s:ta.value,t:$('dt').value,a:$('da').value}))}catch(e){}},250)}
+ta.oninput=prev;$('dt').oninput=prev;$('da').oninput=prev;
+
+/* ---- exportar ---- */
+function full(){var t=$('dt').value.trim(),a=$('da').value.trim();return '\\documentclass[12pt,a4paper]{'+$('dk').value+'}\n\\usepackage[utf8]{inputenc}\n\\usepackage[T1]{fontenc}\n\\usepackage[brazil]{babel}\n\\usepackage{amsmath,amssymb,amsfonts}\n\\usepackage{graphicx,booktabs,array,float,siunitx,soul}\n\\usepackage[dvipsnames]{xcolor}\n\\usepackage{tikz}\n\\usepackage{circuitikz}\n\\usepackage[a4paper,margin=2.5cm]{geometry}\n'+(t?'\\title{'+t+'}\n\\author{'+a+'}\n\\date{\\today}\n':'')+'\n\\begin{document}\n'+(t?'\\maketitle\n':'')+'\n'+ta.value.trim()+'\n\n\\end{document}\n'}
+$('bx').onclick=function(){$('xt').value=full();$('xs').textContent='';$('exp').classList.remove('hide')};
+$('xx').onclick=function(){$('exp').classList.add('hide')};
+$('xc').onclick=function(){$('xt').select();var ok=false;try{ok=document.execCommand('copy')}catch(e){}$('xs').textContent=ok?'Copiado.':'Selecionado. Use Ctrl+C.'};
+$('xd').onclick=function(){var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([$('xt').value],{type:'text/plain'}));a.download='documento.tex';document.body.appendChild(a);a.click();a.remove();$('xs').textContent='Arquivo documento.tex gerado.'};
+
+/* ---- faixa de formatação (estilo Word) ---- */
+var RB=[['<b>N</b>','\\textbf{§}','Negrito (Ctrl+B)'],['<i>I</i>','\\textit{§}','Itálico (Ctrl+I)'],['<u>S</u>','\\underline{§}','Sublinhado (Ctrl+U)'],['x²','\\textsuperscript{§}','Sobrescrito'],['x₂','\\textsubscript{§}','Subscrito'],['Destaque','\\hl{§}','Marca-texto'],['|'],['⇤','\n\\begin{flushleft}\n§\n\\end{flushleft}\n','Alinhar à esquerda'],['≡','\n\\begin{center}\n§\n\\end{center}\n','Centralizar'],['⇥','\n\\begin{flushright}\n§\n\\end{flushright}\n','Alinhar à direita'],['|'],['• Lista','\n\\begin{itemize}\n  \\item §\n  \\item \n\\end{itemize}\n','Lista com marcadores'],['1. Lista','\n\\begin{enumerate}\n  \\item §\n  \\item \n\\end{enumerate}\n','Lista numerada'],['❝ Citação','\n\\begin{quote}\n§\n\\end{quote}\n','Citação'],['Nota','\\footnote{§}','Nota de rodapé'],['|'],['Sumário','\n\\tableofcontents\n\\newpage\n','Sumário'],['Nova página','\n\\newpage\n','Quebra de página']],
+ RS=[['Capítulo (apostila)','\n\\chapter{§}\n'],['Seção','\n\\section{§}\n'],['Subseção','\n\\subsection{§}\n'],['Subsubseção','\n\\subsubsection{§}\n']],
+ RZ=[['Minúsculo','tiny'],['Muito pequeno','scriptsize'],['Pequeno','footnotesize'],['Menor','small'],['Normal','normalsize'],['Grande','large'],['Maior','Large'],['Muito grande','LARGE'],['Enorme','huge'],['Gigante','Huge']],
+ RC=[['Vermelho','red'],['Azul','blue'],['Verde','ForestGreen'],['Laranja','Orange'],['Roxo','Purple'],['Cinza','gray']];
+function opts(a,h){return '<option>'+h+'</option>'+a.map(function(x,i){return '<option value="'+i+'">'+x[0]+'</option>'}).join('')}
+function ribbon(){var o='<button type="button" data-u="undo" title="Desfazer (Ctrl+Z)">↶</button><button type="button" data-u="redo" title="Refazer">↷</button><span class="sp"></span><select id="rs" aria-label="Estilo do texto">'+opts(RS,'Estilo…')+'</select><select id="rz" aria-label="Tamanho">'+opts(RZ,'Tamanho…')+'</select><select id="rc" aria-label="Cor">'+opts(RC,'Cor…')+'</select><span class="sp"></span>';
+ RB.forEach(function(x,i){o+=x.length===1?'<span class="sp"></span>':'<button type="button" data-r="'+i+'" title="'+x[2]+'">'+x[0]+'</button>'});$('rb').innerHTML=o}
+$('rb').onmousedown=function(e){if(e.target.tagName==='BUTTON')e.preventDefault()};
+$('rb').onclick=function(e){var r=e.target.getAttribute('data-r'),u=e.target.getAttribute('data-u');if(r!==null)ins(RB[r][1]);if(u){ta.focus();document.execCommand(u);prev()}};
+$('rb').onchange=function(e){var t=e.target,v=t.value;if(v===''||isNaN(v))return;if(t.id==='rs')ins(RS[v][1]);if(t.id==='rz')ins('{\\'+RZ[v][1]+' §}');if(t.id==='rc')ins('\\textcolor{'+RC[v][1]+'}{§}');t.selectedIndex=0};
+/* ---- atalhos de teclado ---- */
+var GK={a:'\\alpha',b:'\\beta',g:'\\gamma',d:'\\delta',e:'\\varepsilon',z:'\\zeta',h:'\\eta',t:'\\theta',k:'\\kappa',l:'\\lambda',m:'\\mu',n:'\\nu',x:'\\xi',p:'\\pi',r:'\\rho',s:'\\sigma',u:'\\tau',f:'\\varphi',c:'\\chi',y:'\\psi',w:'\\omega',G:'\\Gamma',D:'\\Delta',T:'\\Theta',L:'\\Lambda',X:'\\Xi',P:'\\Pi',S:'\\Sigma',F:'\\Phi',Y:'\\Psi',W:'\\Omega'},
+ KK={s:'\\sum_{§}^{}',i:'\\int_{§}^{}',o:'\\oint ',l:'\\lim_{§\\to }',d:'\\frac{d}{dt}',p:'\\frac{\\partial §}{\\partial }',n:'\\nabla ',f:'\\infty ',v:'\\vec{§}',h:'\\hat{§}',b:'\\bar{§}',m:'\n\\[\n\\begin{bmatrix}\n  § & \\\\\n   & \n\\end{bmatrix}\n\\]\n',c:'\\begin{cases}\n  § & \\\\\n   & \n\\end{cases}',t:'\\text{§}',x:'\\times ',k:'\\cdot ',z:'\\pm ',a:'\\approx ',q:'\\neq ','>':'\\geq ','<':'\\leq ','=':'\\iff ',O:'\\,\\Omega',e:'e^{§}','1':'\n\\section{§}\n','2':'\n\\subsection{§}\n','3':'\n\\subsubsection{§}\n'},
+ DK={arrowright:'\\to ',arrowleft:'\\leftarrow ',arrowup:'\\uparrow ',arrowdown:'\\downarrow ','S+arrowright':'\\Rightarrow ','S+arrowleft':'\\Leftarrow ',p:'\\therefore ','S+p':'\\because ',f:'\\frac{§}{}',r:'\\sqrt{§}',e:'^{§}',d:'_{§}',m:'$§$','S+m':'\n\\[\n  §\n\\]\n','.':'\\cdot ',enter:'\\\\\n'},
+ KS=[['Ctrl + B / I / U','Negrito, itálico e sublinhado'],['Ctrl + → ← ↑ ↓','Setas: → ← ↑ ↓ (com Shift em → ←: ⇒ ⇐)'],['Ctrl + F','Fração (o texto selecionado vira o numerador)'],['Ctrl + R','Raiz quadrada'],['Ctrl + P','Portanto ∴ (com Shift: porque ∵)'],['Ctrl + E','Expoente'],['Ctrl + D','Índice (subscrito)'],['Ctrl + M','Fórmula na linha (com Shift: fórmula destacada)'],['Ctrl + .','Ponto de multiplicação ·'],['Ctrl + Enter','Quebra de linha \\\\'],['Ctrl + /','Comentar ou descomentar as linhas'],['Ctrl + G, depois uma letra','Grego: a α · b β · g γ · d δ · e ε · t θ · l λ · m μ · p π · r ρ · s σ · u τ · f φ · w ω. Com Shift vira maiúscula (D Δ, S Σ, W Ω…)'],['Ctrl + K, depois uma tecla','s ∑ · i ∫ · o ∮ · l lim · d d/dt · p ∂ · n ∇ · f ∞ · v vetor · h chapéu · b barra · m matriz · c casos · t texto · x × · k · · z ± · a ≈ · q ≠ · > ≥ · < ≤ · = ⇔ · O Ω (unidade) · e eˣ · 1 2 3 seção, subseção, subsubseção']],
+ LD=null,LT;
+function toast(m){var t=$('ts');t.textContent=m;t.classList.remove('hide');clearTimeout(LT);LT=setTimeout(function(){t.classList.add('hide');LD=null},3500)}
+function put(v){ins(/[a-zA-Z]$/.test(v)&&v.indexOf('§')<0?v+' ':v)}
+function cmt(){var v=ta.value,s=ta.selectionStart,e=ta.selectionEnd,a=v.lastIndexOf('\n',s-1)+1,b=v.indexOf('\n',e);if(b<0)b=v.length;var L=v.slice(a,b).split('\n'),all=L.every(function(x){return /^\s*%/.test(x)||!x.trim()});ta.setSelectionRange(a,b);ins(L.map(function(x){return all?x.replace(/^(\s*)% ?/,'$1'):'% '+x}).join('\n'))}
+ta.addEventListener('keydown',function(e){
+ if(LD){if(['Shift','Control','Alt','Meta'].indexOf(e.key)>=0)return;var v=(LD==='g'?GK:KK)[e.key];e.preventDefault();$('ts').classList.add('hide');LD=null;if(v)put(v);return}
+ if(!(e.ctrlKey||e.metaKey)||e.altKey)return;var k=e.key.toLowerCase();
+ if((k==='b'||k==='i'||k==='u')&&!e.shiftKey){e.preventDefault();ins({b:'\\textbf{§}',i:'\\textit{§}',u:'\\underline{§}'}[k]);return}
+ if(!$('sk').checked)return;
+ if(k==='g'&&!e.shiftKey){e.preventDefault();LD='g';toast('Grego: a α · b β · g γ · d δ · e ε · t θ · l λ · m μ · p π · r ρ · s σ · f φ · w ω (Shift = maiúscula)');return}
+ if(k==='k'&&!e.shiftKey){e.preventDefault();LD='k';toast('s ∑ · i ∫ · l lim · d d/dt · p ∂ · n ∇ · f ∞ · v vetor · h chapéu · m matriz · c casos · t texto · x × · a ≈ · q ≠ · O Ω · 1 2 3 seções');return}
+ if(k==='/'){e.preventDefault();cmt();return}
+ var v=DK[(e.shiftKey?'S+':'')+k];if(v){e.preventDefault();put(v)}});
+$('kb').onclick=function(){$('ksb').innerHTML=KS.map(function(r){return '<tr><td><b>'+esc(r[0])+'</b></td><td>'+esc(r[1])+'</td></tr>'}).join('');$('ks').classList.remove('hide')};
+$('ksx').onclick=function(){$('ks').classList.add('hide')};
+document.addEventListener('keydown',function(e){if(e.key==='Escape'){$('ks').classList.add('hide');$('exp').classList.add('hide')}});
+try{$('sk').checked=localStorage.getItem('sk')!=='0'}catch(e){}$('sk').onchange=function(){try{localStorage.setItem('sk',this.checked?'1':'0')}catch(e){}};
+
+/* ---- escrita: dicas, IA e vocabulário ---- */
+function clean(t){return t.replace(/^\s*%.*$/gm,'').replace(/\\begin\{(tabular|circuitikz|tikzpicture|equation\*?|align\*?|gather\*?)\}[\s\S]*?\\end\{\1\}/g,' ').replace(/\$\$[\s\S]*?\$\$|\\\[[\s\S]*?\\\]|\$[^$\n]*\$/g,' FÓRMULA ').replace(/\\(?:section|subsection|subsubsection|chapter)\*?\{[^}]*\}/g,' ').replace(/\\(?:begin|end)\{[^}]*\}/g,' ').replace(/\\[a-zA-Z]+\*?(\[[^\]]*\])?/g,' ').replace(/[{}]/g,' ')}
+function uniq(a){return a.map(function(x){return x.toLowerCase()}).filter(function(x,i,l){return l.indexOf(x)===i})}
+function nw(x){return x.split(' ').length}
+function analyze(){var raw=ta.value,pars=clean(raw).split(/\n{2,}/).map(function(x){return x.replace(/\s+/g,' ').trim()}).filter(function(x){return nw(x)>3}),txt=pars.join(' '),w=txt?nw(txt):0,ss=txt.split(/[.!?]+\s+/).filter(function(x){return x.trim().length>3}),T=[];
+ function add(k,m){T.push('<div class="tip '+k+'">'+m+'</div>')}
+ var lg=ss.filter(function(x){return nw(x.trim())>35});if(lg.length)add('w','<b>Frase longa</b> ('+lg.length+'): "'+esc(lg[0].trim().split(' ').slice(0,8).join(' '))+'…" tem '+nw(lg[0].trim())+' palavras. Divida: uma ideia por frase, cerca de 25 palavras.');
+ var lp=pars.filter(function(x){return nw(x)>130});if(lp.length)add('w','<b>Parágrafo longo</b>: '+lp.length+' com mais de 130 palavras. Separe por ideia, cada um com uma frase principal.');
+ var vg=txt.match(/\b(coisas?|tipo|meio que|muito|bastante|legal|super|pra|a gente|basicamente|simplesmente|etc)\b/gi);if(vg)add('w','<b>Termos vagos ou informais</b>: '+esc(uniq(vg).join(', '))+'. Prefira termos precisos e valores quantificados.');
+ if(/\b(eu|meu|minha|meus|minhas)\b/i.test(txt))add('i','<b>Voz</b>: em texto técnico prefira a forma impessoal: "Observa-se que…", "Neste capítulo, apresenta-se…".');
+ if(/\b(vou|vai|vamos|irei|iremos) estar \w+ndo\b/i.test(txt))add('w','<b>Gerundismo</b>: troque "vou estar calculando" por "calcularei" ou "calcula-se".');
+ var fr={},m=txt.toLowerCase().match(/[a-záéíóúâêôãõç]{7,}/g)||[];m.forEach(function(x){fr[x]=(fr[x]||0)+1});var rp=Object.keys(fr).filter(function(k){return fr[k]>=6}).slice(0,3);
+ if(w>150&&rp.length)add('i','<b>Repetição</b>: "'+esc(rp.join('", "'))+'" aparece muitas vezes. Varie com sinônimos ou pronomes.');
+ if(/\$\$|\\\[|\\begin\{(equation|align)/.test(raw)&&!/\bonde\b/i.test(txt))add('i','<b>Equações</b>: depois de uma fórmula, defina cada símbolo: "onde V é a tensão…".');
+ if(/\\begin\{(figure|table)/.test(raw)&&!/\\ref\{/.test(raw))add('i','<b>Figuras e tabelas</b>: cite no texto com \\ref{rótulo} e dê um \\label a cada uma.');
+ if(w>250&&!/\\(section|chapter)/.test(raw))add('i','<b>Estrutura</b>: divida em seções (objetivo, desenvolvimento, exemplo, conclusão).');
+ if(w>=40&&!T.length)add('i','Nenhum problema detectado automaticamente. A revisão por IA faz uma análise mais profunda.');
+ $('tips').innerHTML=T.join('')||'<p class="hint">Escreva um pouco mais para receber dicas.</p>';
+ $('stt').textContent=w+' palavras · '+ss.length+' frases · média de '+(ss.length?Math.round(w/ss.length):0)+' palavras por frase · ~'+Math.max(1,Math.round(w/200))+' min de leitura';
+ var n=T.filter(function(x){return x.indexOf('tip w')>0}).length,b=document.querySelector('[data-t="Escrita"]');if(b)b.textContent='Escrita'+(n?' ('+n+')':'')}
+var V={'Adição':'além disso,ademais,igualmente,soma-se a isso','Contraste':'entretanto,no entanto,contudo,por outro lado,ao passo que','Causa':'pois,uma vez que,visto que,devido a','Consequência':'portanto,logo,assim,consequentemente,por conseguinte','Exemplo':'por exemplo,a título de ilustração,como ocorre em','Ênfase':'destaca-se que,vale ressaltar que,note-se que','Sequência':'inicialmente,em seguida,posteriormente,por fim','Conclusão':'em suma,conclui-se que,em síntese','Verbos':'demonstrar,evidenciar,verificar,determinar,calcular,aplicar,derivar,obter,considerar,assumir,definir,representar,modelar,analisar'};
+function vocab(){$('vc').innerHTML=Object.keys(V).map(function(k){return '<div class="hint" style="margin:10px 0 4px"><b>'+k+'</b></div><div class="sn">'+V[k].split(',').map(function(x){return '<button type="button" data-v="'+x+'">'+x+'</button>'}).join('')+'</div>'}).join('')}
+$('vc').onmousedown=function(e){if(e.target.tagName==='BUTTON')e.preventDefault()};$('vc').onclick=function(e){var v=e.target.getAttribute('data-v');if(v)ins(v+' ')};
+
+/* ---- início ---- */
+var d0=null;try{d0=JSON.parse(localStorage.getItem('ls')||'null')}catch(e){}
+ta.value=d0?d0.s:'\\section{Divisor de tensão}\n\nPara dois resistores em série, a tensão de saída é\n\n\\[\n  V_{out}=V_{in}\\,\\frac{R_2}{R_1+R_2}\n\\]\n\nUse as abas à esquerda para inserir símbolos, tabelas, matrizes, circuitos e diagramas.\n';
+if(d0){$('dt').value=d0.t||'';$('da').value=d0.a||''}
+cats();keys();tabs();tg();mg();setG();bp();ribbon();vocab();prev();
+</script></body></html>
